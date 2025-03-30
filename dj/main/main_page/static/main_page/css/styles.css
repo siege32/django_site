@@ -1,0 +1,34 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: Montserrat;
+}
+
+.margins {
+    flex: 1; /* Занимает доступное пространство */
+    margin: 40px;
+}
+
+footer {
+    margin-top: 20px;
+    background-color: #f8f9fa; /* Цвет фона */
+    text-align: center; /* Выравнивание текста */
+    padding: 10px; /* Отступы */
+}
+
+.navbar{
+    padding: 10px;
+}
+
+.navbar .container-fluid{
+    justify-content: flex-start;
+}
+
+.modal-content .form-select,
+.modal-content .form-control {
+    width: 465px !important;
+}
+

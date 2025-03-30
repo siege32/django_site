@@ -1,0 +1,185 @@
+<!-- Основное модальное окно -->
+<div class="modal fade" id="addCashflowModal" tabindex="-1" aria-labelledby="addCashflowModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addCashflowModalLabel">Добавить запись</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+
+            <form id="cashflowForm">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Статус: 
+                            <select name="status" class="form-select">
+                                {% for stat in statuses %}
+                                    <option value="{{ stat.id }}">{{ stat.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Тип: 
+                            <select name="type_cashflow" class="form-select">  
+                                {% for type in types_cashflow %}
+                                    <option value="{{ type.id }}">{{ type.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Категория:
+                            <select id="category" name="category" class="form-select">
+                                <option value="">Выберите категорию</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Подкатегория:
+                            <select id="subcategory" name="subcategory" disabled class="form-select">
+                                <option value="">Сначала выберите категорию</option>
+                                {% for subcategory in subcategories %}
+                                    <option value="{{ subcategory.id }}" data-category="{{ subcategory.category.id }}">{{ subcategory.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                    
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Сумма: <input type="number" class="form-control" name="sum_cashflow" required></label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Комментарий: <textarea name="comment" class="form-control" rows="4"></textarea></label>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="saveRecord">Сохранить</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления статуса -->
+<div class="modal fade" id="addStatusModal" tabindex="-1" aria-labelledby="addStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addStatusModalLabel">Добавить статус</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+
+            <form id="statusForm">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Название статуса:</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveStatus">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления типа -->
+<div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addTypeModalLabel">Добавить тип</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+
+            <form id="typeForm">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Название типа:</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveType">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления категории -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addCategoryModalLabel">Добавить категорию</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+
+            <form id="categoryForm">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Название категории:</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveCategory">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления подкатегории -->
+<div class="modal fade" id="addSubcategoryModal" tabindex="-1" aria-labelledby="addSubcategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addSubcategoryModalLabel">Добавить подкатегорию</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+
+            <form id="subcategoryForm">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Категория:
+                            <select id="category" name="category" class="form-select">
+                                <option value="">Выберите категорию</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Название подкатегории:</label>
+                        <input type="text" class="form-control" name="subcategory" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveSubcategory">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
