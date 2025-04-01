@@ -14,7 +14,7 @@ pip (для установки зависимостей)
 
 Шаги для запуска
 1. Для начала клонируйте репозиторий проекта:
-git clone https://github.com/yourusername/yourproject.git
+git clone https://github.com/siege32/django_site.git
 2. После клонирования репозитория перейдите в папку с проектом
 3. Запустить сервер разработки: 
 python manage.py runserver
