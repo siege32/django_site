@@ -1,0 +1,43 @@
+<div class="mb-4">
+    <h3>Записи о движении денежных средств</h3>
+    <table id="cashflow-table" class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Дата создания</th>
+                <th scope="col">Статус</th>
+                <th scope="col">Тип</th>
+                <th scope="col">Категория</th>
+                <th scope="col">Подкатегория</th>
+                <th scope="col">Сумма</th>
+                <th scope="col">Комментарий</th>
+                <th scope="col">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in posts %}
+            <tr>
+                <td>{{ p.date_create|date:'d.m.Y' }}</td>
+                <td>{{ p.status }}</td>
+                <td>{{ p.type_cashflow }}</td>
+                <td>{{ p.category }}</td>
+                <td>{{ p.subcategory }}</td>
+                <td>{{ p.sum_cashflow }} рублей</td>
+                <td>{{ p.comment }}</td>
+                <td>
+                    <button class="edit btn" 
+                            data-id="{{ p.id }}" 
+                            data-status="{{ p.status.id }}"
+                            data-type="{{ p.type_cashflow.id }}"
+                            data-category="{{ p.category.id }}"
+                            data-subcategory="{{ p.subcategory.id }}"
+                            data-sum="{{ p.sum_cashflow }}"
+                            data-comment="{{ p.comment }}">
+                        ✏️
+                    </button>
+                    <button class="delete-btn btn" data-record-id="{{ p.id }}">🗑️</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

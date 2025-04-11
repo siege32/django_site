@@ -3,20 +3,42 @@ from django.http import JsonResponse, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 
-def main_page(request): # Представление страницы
+def main_page(request):
     categories = Category.objects.all()
     subcategories = Subcategory.objects.all()
-    posts = Cashflow.objects.all()
     statuses = Status.objects.all()
     types_cashflow = Type_cashflow.objects.all()
+
+    posts = Cashflow.objects.all()
+
+    # Получаем параметры фильтра из запроса
+    date = request.GET.get("date")
+    status_id = request.GET.get("status")
+    type_id = request.GET.get("type")
+    category_id = request.GET.get("category")
+    subcategory_id = request.GET.get("subcategory")
+
+    # Применяем фильтрацию
+    if date:
+        posts = posts.filter(date_create=date)
+    if status_id:
+        posts = posts.filter(status_id=status_id)
+    if type_id:
+        posts = posts.filter(type_cashflow_id=type_id)
+    if category_id:
+        posts = posts.filter(category_id=category_id)
+    if subcategory_id:
+        posts = posts.filter(subcategory_id=subcategory_id)
 
     return render(request, "main_page/main_page.html", {
         "categories": categories,
         "subcategories": subcategories,
-        "posts": posts,
         "statuses": statuses,
         "types_cashflow": types_cashflow,
+        "posts": posts,
+        "request": request,  # Чтобы можно было получить значения в шаблоне
     })
+
 
 def add_cashflow(request): # Представление сбора данных
     if request.method == "POST":

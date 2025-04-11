@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+
+
 // Функция для получения CSRF-токена из куков
 function getCookie(name) {
     let cookieValue = null;

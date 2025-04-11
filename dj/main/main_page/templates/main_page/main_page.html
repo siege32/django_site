@@ -3,139 +3,12 @@
     {% include "main_page/header.html" %}
 
     <body>
-        <div class="margins">
-            <h1>Записи о движении денежных средств</h1>
-
-            <table id="cashflow-table" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">Дата создания</th>
-                        <th scope="col">Статус</th>
-                        <th scope="col">Тип</th>
-                        <th scope="col">Категория</th>
-                        <th scope="col">Подкатегория</th>
-                        <th scope="col">Сумма</th>
-                        <th scope="col">Комментарий</th>
-                        <th scope="col">Действия</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for p in posts %}
-                    <tr>
-                        <td>{{ p.date_create|date:'d.m.Y' }}</td>
-                        <td>{{ p.status }}</td>
-                        <td>{{ p.type_cashflow }}</td>
-                        <td>{{ p.category }}</td>
-                        <td>{{ p.subcategory }}</td>
-                        <td>{{ p.sum_cashflow }} рублей</td>
-                        <td>{{ p.comment }}</td>
-                        <td>
-                            <button class="edit btn" 
-                                    data-id="{{ p.id }}" 
-                                    data-status="{{ p.status.id }}"
-                                    data-type="{{ p.type_cashflow.id }}"
-                                    data-category="{{ p.category.id }}"
-                                    data-subcategory="{{ p.subcategory.id }}"
-                                    data-sum="{{ p.sum_cashflow }}"
-                                    data-comment="{{ p.comment }}">
-                                ✏️
-                            </button>
-                            <button class="delete-btn btn" data-record-id="{{ p.id }}">🗑️</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            
-
-
-           <!-- Кнопка-триггер модального окна -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCashflowModal">
-                + Запись
-            </button>
-
-            <!-- Группа кнопок-триггеров модальных окон -->
-            <div class="btn-group" role="group" aria-label="Basic button group" style="margin-left: 20px;">
-                <button type="button" class="btn btn-primary">+ Статус</button>
-                <button type="button" class="btn btn-primary">+ Тип</button>
-                <button type="button" class="btn btn-primary">+ Категория</button>
-                <button type="button" class="btn btn-primary">+ Подкатегория</button>
-            </div>
-
-            {% include "main_page/modals.html" %}
-            
+        <div class="margins mb-4">
+            {% include "main_page/components/add_data.html" %}
+            {% include "main_page/components/filters.html" %}
+            {% include "main_page/components/data_table.html" %}
+            {% include "main_page/components/modals.html" %}
          </div>
-
-         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                let categorySelect = document.getElementById("category");
-                let subcategorySelect = document.getElementById("subcategory");
-            
-                categorySelect.addEventListener("change", function () {
-                    let selectedCategory = this.value;
-                    subcategorySelect.innerHTML = '<option value="">Загрузка...</option>';
-                    subcategorySelect.disabled = true;
-            
-                    fetch(`/get_subcategories/?category_id=${selectedCategory}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            subcategorySelect.innerHTML = '<option value="">Выберите подкатегорию</option>';
-                            data.forEach(subcategory => {
-                                let option = document.createElement("option");
-                                option.value = subcategory.id;
-                                option.textContent = subcategory.name;
-                                subcategorySelect.appendChild(option);
-                            });
-                            subcategorySelect.disabled = false;
-                        })
-                        .catch(error => console.error("Ошибка загрузки подкатегорий:", error));
-                });
-            });
-
-            document.addEventListener("DOMContentLoaded", function () {
-                document.querySelectorAll(".delete-btn").forEach(button => {
-                    button.addEventListener("click", function () {
-                        let recordId = this.dataset.recordId;
-                        
-
-                        if (confirm("Вы уверены, что хотите удалить эту запись?")) {
-                            fetch(`/delete_cashflow/${recordId}/`, {
-                                method: "POST",
-                                headers: { "X-CSRFToken": getCookie("csrftoken") },
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.message) {
-                                    alert(data.message);
-                                    location.reload();  // Обновляем страницу после удаления
-                                } else {
-                                    alert("Ошибка при удалении");
-                                }
-                            })
-                            .catch(error => console.error("Ошибка:", error));
-                        }
-                    });
-                });
-            });
-
-            // Функция для получения CSRF-токена
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== "") {
-                    let cookies = document.cookie.split(";");
-                    for (let i = 0; i < cookies.length; i++) {
-                        let cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + "=")) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-
-            
-            </script>
     </body>
     
     {% include "main_page/footer.html" %}
@@ -144,7 +17,7 @@
         $(document).ready(function() {
             $('.edit').click(function() {
                 let recordId = $(this).data('id');
-
+                let category = $('#cashflowForm select[name="category"]').val();
                 // Заполняем модальное окно существующими данными
                 $('#cashflowForm select[name="status"]').val($(this).data('status'));
                 $('#cashflowForm select[name="type_cashflow"]').val($(this).data('type'));

@@ -28,8 +28,8 @@ class Type_cashflow(models.Model): # Модель таблицы Типов
 
 class Cashflow(models.Model): # Модель таблицы Записей
     date_create = models.DateField(default=date.today)
-    status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True)  # Исправлено
-    type_cashflow = models.ForeignKey(Type_cashflow, on_delete=models.SET_NULL, null=True)  # Исправлено
+    status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True) 
+    type_cashflow = models.ForeignKey(Type_cashflow, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True)
     sum_cashflow = models.IntegerField()
